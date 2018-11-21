@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <link href="/static/styles.css" rel="stylesheet"/>
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+        <!-- Social Footer, Colour Matching Icons -->
+        <!-- Include Font Awesome Stylesheet in Header -->
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+        <!-- // -->
+
+        <title>Qubic: {% block title %}{% endblock %}</title>
+    <style>
+        /* my own css*/
+        .vertical-center {
+              min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+              min-height: 100vh; /* These two lines are counted as one :-)       */
+
+              display: flex;
+              align-items: center;
+            }
+        /*--------------*/
+
+
+        /* Multicoloured Hover Variations */
+
+         #social-fb:hover {
+             color: #3B5998;
+         }
+         #social-tw:hover {
+             color: #4099FF;
+         }
+         #social-gp:hover {
+             color: #d34836;
+         }
+         #social-em:hover {
+             color: #f39c12;
+         }
+         /*---------------*/
+
+        /* social footer */
+
+        .social:hover {
+             -webkit-transform: scale(1.1);
+             -moz-transform: scale(1.1);
+             -o-transform: scale(1.1);
+         }
+        .social {
+             -webkit-transform: scale(0.8);
+             /* Browser Variations: */
+
+             -moz-transform: scale(0.8);
+             -o-transform: scale(0.8);
+             -webkit-transition-duration: 0.5s;
+             -moz-transition-duration: 0.5s;
+             -o-transition-duration: 0.5s;
+         }
+         /*--------------*/
+
+        /*home page cards*/
+        body{
+            background: #eee;
+        }
+        span{
+            font-size:15px;
+        }
+        .underline{
+          text-decoration:none;
+          color: #0062cc;
+          border-bottom:2px solid #0062cc;
+        }
+        .box{
+            padding:60px 0px;
+        }
+
+        .box-part{
+            background:#FFF;
+            border-radius:0;
+            padding:60px 10px;
+            margin:30px 0px;
+        }
+        .text{
+            margin:25px 0px;
+        }
+
+        .fa{
+             color:#4183D7;
+        }
+        /*----------------*/
+
+
+        /* testing */
+        .pinkBg {
+            background-color: #ed184f !important;
+            background-image: linear-gradient(90deg, #fd5581, #fd8b55);
+        }
+
+        .intro-banner-vdo-play-btn {
+            height: 60px;
+            width: 60px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            text-align: center;
+            margin: -30px 0 0 -30px;
+            border-radius: 100px;
+            z-index: 1
+        }
+
+        .intro-banner-vdo-play-btn i {
+            line-height: 56px;
+            font-size: 30px
+        }
+
+        .intro-banner-vdo-play-btn .ripple {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            z-index: -1;
+            left: 50%;
+            top: 50%;
+            opacity: 0;
+            margin: -80px 0 0 -80px;
+            border-radius: 100px;
+            -webkit-animation: ripple 1.8s infinite;
+            animation: ripple 1.8s infinite
+        }
+
+        @-webkit-keyframes ripple {
+            0% {
+                opacity: 1;
+                -webkit-transform: scale(0);
+                transform: scale(0)
+            }
+            100% {
+                opacity: 0;
+                -webkit-transform: scale(1);
+                transform: scale(1)
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                opacity: 1;
+                -webkit-transform: scale(0);
+                transform: scale(0)
+            }
+            100% {
+                opacity: 0;
+                -webkit-transform: scale(1);
+                transform: scale(1)
+            }
+        }
+
+        .intro-banner-vdo-play-btn .ripple:nth-child(2) {
+            animation-delay: .3s;
+            -webkit-animation-delay: .3s
+        }
+
+        .intro-banner-vdo-play-btn .ripple:nth-child(3) {
+            animation-delay: .6s;
+            -webkit-animation-delay: .6s
+        }
+
+    </style>
+
+    </head>
+
+    <body>
+        <!--the navbar that is always on top-->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="#">WebSiteName</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                {% if session.user_id %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item"><a class="nav-link" href="/">Change Password</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/">Log Out</a></li>
+                    </ul>
+                {% else %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/register"><span class="glyphicon glyphicon-user"></span>Register</a></li>
+                        <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    </ul>
+                {% endif %}
+            </ul>
+          </div>
+        </nav>
+
+        <!--the main part of the web page-->
+        <main class="container-fluid">
+            {% block main %}{% endblock %}
+        </main>
+
+    </body>
+
+</html>

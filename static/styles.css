@@ -1,0 +1,76 @@
+/* my own css*/
+.vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+}
+/*--------------*/
+
+
+/* Multicoloured Hover Variations */
+
+#social-fb:hover {
+    color: #3B5998;
+}
+#social-tw:hover {
+     color: #4099FF;
+}
+#social-gp:hover {
+     color: #d34836;
+}
+#social-em:hover {
+     color: #f39c12;
+}
+/*---------------*/
+
+/* social footer */
+
+.social:hover {
+ -webkit-transform: scale(1.1);
+ -moz-transform: scale(1.1);
+ -o-transform: scale(1.1);
+}
+.social {
+ -webkit-transform: scale(0.8);
+ /* Browser Variations: */
+
+ -moz-transform: scale(0.8);
+ -o-transform: scale(0.8);
+ -webkit-transition-duration: 0.5s;
+ -moz-transition-duration: 0.5s;
+ -o-transition-duration: 0.5s;
+}
+/*--------------*/
+
+/*home page cards*/
+body{
+    background: #eee;
+}
+span{
+    font-size:15px;
+}
+.underline{
+    text-decoration:none;
+    color: #0062cc;
+    border-bottom:2px solid #0062cc;
+}
+.box{
+    padding:60px 0px;
+}
+
+.box-part{
+    background:#FFF;
+    border-radius:0;
+    padding:60px 10px;
+    margin:30px 0px;
+}
+.text{
+    margin:20px 0px;
+}
+
+.fa{
+     color:#4183D7;
+}
+/*-----------------*/
