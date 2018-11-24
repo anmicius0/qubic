@@ -1,6 +1,6 @@
 import os
+import sqlite3
 
-from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
@@ -27,7 +27,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///quiz.db")
+db = sqlite3.connect("quiz.db")
 
 @app.route('/')
 def welcome():
