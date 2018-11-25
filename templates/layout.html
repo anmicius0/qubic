@@ -34,9 +34,9 @@
     <body>
         <!--the navbar that is always on top-->
         <nav class="navbar navbar-inverse navbar-fixed-top">
-          <div class="container">
+          <div class="container" style=" padding-left:0 ">
             <div class="navbar-header">
-              <a class="navbar-brand" href="#">WebSiteName</a>
+              <a class="navbar-brand" href="/">Qubic</a>
             </div>
             <ul class="nav navbar-nav navbar-right">
                 {% if session.user_id %}
@@ -58,8 +58,9 @@
         <main class="container-fluid">
             {% block main %}{% endblock %}
         </main>
+
         <!--the social footer-->
-        <div class="container">
+        <div class="container" style=" padding:30px;">
           <hr>
               <div class="text-center center-block">
                   <p class="txt-railway">- Bootsnipp.com -</p>
@@ -71,7 +72,7 @@
         	    </div>
           </hr>
         </div>
-        
+
     </body>
 
 </html>
