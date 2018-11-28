@@ -145,16 +145,5 @@ def menu2():
 
     return render_template("menu2.html", lens = len(rows), item = rows)
 
-@app.route("/home/test-eng")
-def test():
-
-    # get the search text
-    sub = "eng"
-
-    # Show portfolio of stocks
-    rows = db.execute("SELECT * FROM books WHERE subject = :subject ORDER BY book", subject = sub)
-
-    return render_template("menu.html", lens = len(rows), item = rows)
-
 if __name__ =='__main__':
     app.run(debug=True)
