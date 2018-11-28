@@ -43,7 +43,7 @@ def register():
 
         con = sql.connect("quiz.db")
         db = con.cursor()
-        
+
         # Ensure username was submitted
         if not request.form.get("username"):
             return apology("Missing USER NAME")
@@ -155,3 +155,6 @@ def test():
     rows = db.execute("SELECT * FROM books WHERE subject = :subject ORDER BY book", subject = sub)
 
     return render_template("menu.html", lens = len(rows), item = rows)
+
+if __name__ =='__main__':
+    app.run(debug=True)

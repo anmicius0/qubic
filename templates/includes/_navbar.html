@@ -1,0 +1,21 @@
+<!--the navbar that is always on top-->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container" style=" padding-left:0 ">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Qubic</a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+        {% if session.user_id %}
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item"><a class="nav-link" href="/">Change Password</a></li>
+                <li class="nav-item"><a class="nav-link" href="/">Log Out</a></li>
+            </ul>
+        {% else %}
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/register"><span class="glyphicon glyphicon-user"></span>Register</a></li>
+                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        {% endif %}
+    </ul>
+  </div>
+</nav>

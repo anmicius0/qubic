@@ -32,46 +32,15 @@
     </head>
 
     <body>
-        <!--the navbar that is always on top-->
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-          <div class="container" style=" padding-left:0 ">
-            <div class="navbar-header">
-              <a class="navbar-brand" href="/">Qubic</a>
-            </div>
-            <ul class="nav navbar-nav navbar-right">
-                {% if session.user_id %}
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item"><a class="nav-link" href="/">Change Password</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/">Log Out</a></li>
-                    </ul>
-                {% else %}
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/register"><span class="glyphicon glyphicon-user"></span>Register</a></li>
-                        <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                    </ul>
-                {% endif %}
-            </ul>
-          </div>
-        </nav>
+
+        {% include 'includes/_navbar.html '%}
 
         <!--the main part of the web page-->
         <main class="container-fluid">
             {% block main %}{% endblock %}
         </main>
 
-        <!--the social footer-->
-        <div class="container" style=" padding:30px;">
-          <hr>
-              <div class="text-center center-block">
-                  <p class="txt-railway">- Bootsnipp.com -</p>
-                  <br />
-                    <a href="#"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
-                    <a href="#"><i id="social-tw" class="fa fa-twitter-square fa-3x social"></i></a>
-                    <a href="#"><i id="social-gp" class="fa fa-google-plus-square fa-3x social"></i></a>
-                    <a href="#"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
-        	    </div>
-          </hr>
-        </div>
+        {% include 'include/_socialfooter.html' %}
 
     </body>
 
