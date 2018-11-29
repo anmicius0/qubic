@@ -41,9 +41,6 @@ def register():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        con = sql.connect("quiz.db")
-        db = con.cursor()
-
         # Ensure username was submitted
         if not request.form.get("username"):
             return apology("Missing USER NAME")
@@ -118,32 +115,3 @@ def login():
 @app.route("/home")
 def home():
     return render_template("home.html")
-
-@app.route("/book")
-def menu():
-
-    # get the search text
-    sub = request.args.get("subject")
-
-    # Show portfolio of stocks
-    rows = db.execute("SELECT * FROM books WHERE subject = :subject ORDER BY book", subject = sub)
-
-    return render_template("menu.html", lens = len(rows), item = rows)
-
-@app.route("/chps")
-def menu2():
-
-    re = request.args.get("re")
-
-    sub,book = re.split("%2C")
-
-    # get the book chosed
-    book = request.args.get("book")
-
-    # Show portfolio of stocks
-    rows = db.execute("SELECT * FROM chps WHERE subject = :subject AND book = :book ORDER BY book", subject = sub, book = book)
-
-    return render_template("menu2.html", lens = len(rows), item = rows)
-
-if __name__ =='__main__':
-    app.run(debug=True)
