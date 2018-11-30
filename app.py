@@ -11,6 +11,9 @@ from helpers import apology, login_required
 
 app = Flask(__name__)
 
+@app.before_request
+def before_request():
+    g.db = sqlite3.connect("quiz.db")
 
 # Ensure responses aren't cached
 @app.after_request
@@ -26,6 +29,12 @@ app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+
+@app.teardown_request
+def teardown_request(exception):
+    if hasattr(g, 'db'):
+        g.db.close()
 
 
 @app.route('/')
@@ -53,9 +62,14 @@ def register():
         elif not request.form.get("confirmation") == request.form.get("password"):
             return apology("PASSWORDD DOESN'T MATCH")
 
+        username = request.form.get("username")
         hashpass = generate_password_hash(request.form.get("confirmation"))
 
-        result = db.execute("INSERT INTO users (username, hash) VALUES(:username, :hashh)", username = request.form.get("username"), hashh = hashpass)
+        # the text that is going to be in db.execute
+        exetext = "INSERT INTO users (username, password) VALUES(" + '"' + username + "," + hashpass + '")' + "'"
+        result = g.db.execute(exetext)
+        g.db.commit()
+
         if not result:
             return apology("the user name already exist")
 
@@ -64,8 +78,9 @@ def register():
         session.clear()
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = :username",
+        rows = g.db.execute("SELECT * FROM users WHERE username = :username",
             username=request.form.get("username"))
+        g.db.commit()
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -76,6 +91,7 @@ def register():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register.html")
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -95,8 +111,9 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = :username",
+        rows = g.db.execute("SELECT * FROM users WHERE username = :username",
                           username=request.form.get("username"))
+        g.db.commit()
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
