@@ -1,0 +1,4 @@
+mysql_host: 'us-cdbr-iron-east-01.cleardb.net'
+mysql_user: 'b58596b7db4af6'
+mysql_password: 'b7ee0a0a'
+mysql_db: 'heroku_cc42e291a8324b6'
