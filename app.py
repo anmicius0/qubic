@@ -42,7 +42,16 @@ def welcome():
 
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    # creat a cursor for mysql
+    cur = mysql.connection.cursor()
+    # Query database for subjects
+    cur.execute("SELECT * FROM subjects")
+    objects = cur.fetchall()
+
+    # close the cursor
+    cur.close()
+    
+    return render_template("home.html", objects = objects)
 
 # let user register for this system
 @app.route("/register", methods=["GET", "POST"])
