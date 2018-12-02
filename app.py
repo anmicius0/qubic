@@ -33,7 +33,7 @@ def after_request(response):
 @app.before_request
 def before_request():
     g.user_id = None
-    if 'user' in session:
+    if 'user_id' in session:
         g.user_id = session['user_id']
 
 @app.route('/')
@@ -81,10 +81,12 @@ def register():
         # creat a cursor for the db
         cur = mysql.connection.cursor()
         # Query database for username
-        cur.execute("SELECT * FROM users WHERE username = %s",(request.form.get("username")))
-        row = cur.fetchone()
-        # Remember which user has logged in
-        session["user_id"] = row['uid']
+        resultValue = cur.execute("SELECT * FROM users WHERE username = %s",[username])
+        if resultValue == 1:
+            userDetail = cur.fetchall()
+            # Remember which user has logged in
+            for row in userDetail:
+                session["user_id"] = row[0]
         # close the cursor
         cur.close()
 
@@ -113,17 +115,31 @@ def login():
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
+        # store the input into values
+        username = request.form.get("username")
+        password = request.form.get("password")
+
         # make a connection to db
         cur = mysql.connection.cursor()
         # Query database for username
-        cur.execute("SELECT * FROM users WHERE username = %s",(request.form.get("username")))
-        row = cur.fetchone()
-        # Ensure username exists and password is correct
-        if len(row) != 1 or not check_password_hash(row["hashpass"], request.form.get("password")):
+        resultValue = cur.execute("SELECT * FROM users WHERE username = %s",[username])
+
+        # if the user exist
+        if resultValue == 1:
+            userDetail = cur.fetchall()
+        else:
             return redirect("/login")
 
         # Remember which user has logged in
-        session["user_id"] = row["uid"]
+        for row in userDetail:
+            # check the hash
+            if not check_password_hash(row[2], password):
+                return redirect("/login")
+            else:
+                session["user_id"] = row[0]
+
+        # close the cursor
+        cur.close()
 
         # Redirect user to home page
         return redirect("/home")
