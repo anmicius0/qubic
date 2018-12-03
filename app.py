@@ -40,19 +40,6 @@ def before_request():
 def welcome():
     return render_template("index.html")
 
-@app.route("/home")
-def home():
-    # creat a cursor for mysql
-    cur = mysql.connection.cursor()
-    # Query database for subjects
-    cur.execute("SELECT * FROM subjects")
-    objects = cur.fetchall()
-
-    # close the cursor
-    cur.close()
-    
-    return render_template("home.html", objects = objects)
-
 # let user register for this system
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -156,3 +143,51 @@ def login():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
+
+@app.route("/home")
+def home():
+
+    # Forget any _sub
+    session.pop('_sub', None)
+
+    # creat a cursor for mysql
+    cur = mysql.connection.cursor()
+    # Query database for subjects
+    cur.execute("SELECT * FROM subjects")
+    objects = cur.fetchall()
+
+    # close the cursor
+    cur.close()
+
+    return render_template("home.html", objects = objects)
+
+@app.route("/books", methods=['GET', 'POST'])
+def books():
+    if request.method == "POST":
+        # creat a cursor
+        cur = mysql.connection.cursor()
+        # get the form data
+        sub = request.form.get("subject")
+        # query db for books
+        cur.execute("SELECT * from books WHERE subID = %s", [sub])
+        objects = cur.fetchall()
+
+        # store the subject into a session
+        session["_sub"] = sub
+
+        return render_template("home2.html", objects = objects)
+
+@app.route("/chapters", methods=['GET', 'POST'])
+def chapters():
+    if request.method == 'POST':
+        # creat a cursor
+        cur = mysql.connection.cursor()
+        # get the session data
+        sub = session["_sub"]
+        # get the form data
+        book = request.form.get('book')
+        # query the db
+        cur.execute("SELECT * from chapters WHERE subID = %s AND book = %s", (sub, book))
+        objects = cur.fetchall()
+
+        return render_template("home3.html", objects = objects)

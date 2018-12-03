@@ -14,28 +14,28 @@
 
       					<div class="box-part text-center">
 
-                  <i class="{{i[3]}}" aria-hidden="true"></i>
+                  <i class="fa fa-angle-down fa-3x"></i>
 
       						<div class="title">
-      							<h3>{{i[1]}}</h3>
+      							<h3>{{i[2]}}</h3>
       						</div>
 
-      						<div class="text">
-      							<span>{{i[2]}}</span>
+                  <!-- the descruption -->
+                  <div class="text">
+      							<span>{{i[3]}}</span>
       						</div>
-                  
 
-                  <form action="/books" method="post">
+                  <form action="/chapters" method="post">
         						<div class="form-group" >
-                      <input type="radio" name="subject" value="{{i[0]}}">
+                      <input type="radio" name="book" value="{{i[2]}}">
                     </div>
                     <button type="submit" class="btn btn-primary"> Enter </button>
                   </form>
-
       					 </div>
 
       				</div>
             {% endfor %}
+
       		</div>
         </div>
     </div>
