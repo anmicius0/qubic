@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Home
+    Chose chapter
 {% endblock %}
 
 {% block main %}
@@ -27,7 +27,7 @@
 
                   <form action="/test" method="post">
         						<div class="form-group" >
-                      <input type="radio" name="book" value="{{i[3]}}">
+                      <input type="radio" name="chapter" value="{{i[3]}}">
                     </div>
                     <button type="submit" class="btn btn-primary"> Enter </button>
                   </form>

@@ -153,7 +153,7 @@ def home():
     # creat a cursor for mysql
     cur = mysql.connection.cursor()
     # Query database for subjects
-    cur.execute("SELECT * FROM subjects")
+    cur.execute("SELECT * FROM subjects ORDER BY subject")
     objects = cur.fetchall()
 
     # close the cursor
@@ -164,30 +164,55 @@ def home():
 @app.route("/books", methods=['GET', 'POST'])
 def books():
     if request.method == "POST":
-        # creat a cursor
-        cur = mysql.connection.cursor()
+
         # get the form data
         sub = request.form.get("subject")
-        # query db for books
-        cur.execute("SELECT * from books WHERE subID = %s", [sub])
-        objects = cur.fetchall()
-
         # store the subject into a session
         session["_sub"] = sub
+
+        # creat a cursor
+        cur = mysql.connection.cursor()
+        # query db for books
+        cur.execute("SELECT * from books WHERE subID = %s ORDER BY book", [sub])
+        objects = cur.fetchall()
 
         return render_template("home2.html", objects = objects)
 
 @app.route("/chapters", methods=['GET', 'POST'])
 def chapters():
     if request.method == 'POST':
-        # creat a cursor
-        cur = mysql.connection.cursor()
+
         # get the session data
         sub = session["_sub"]
-        # get the form data
         book = request.form.get('book')
+
+        # creat a cursor
+        cur = mysql.connection.cursor()
         # query the db
-        cur.execute("SELECT * from chapters WHERE subID = %s AND book = %s", (sub, book))
+        cur.execute("SELECT * from chapters WHERE subID = %s AND book = %s ORDER BY chapter",
+        (sub, book))
         objects = cur.fetchall()
 
+        # store the subject into a session
+        session["_book"] = book
+
         return render_template("home3.html", objects = objects)
+
+@app.route("/test", methods=['GET', 'POST'])
+def text():
+    if request.method == 'POST':
+
+        # get the session data
+        sub = session["_sub"]
+        book = session["_book"]
+        session["_chapter"] = request.form.get("chapter")
+        chapter = session["_chapter"]
+
+        # creat a cursor
+        cur = mysql.connection.cursor()
+        # query the db
+        cur.execute("SELECT * from questions WHERE subID = %s AND book = %s AND chapter = %s ORDER BY RAND() LIMIT 1",
+        (sub, book, chapter))
+        objects = cur.fetchall()
+
+        return render_template("test.html", objects = objects)

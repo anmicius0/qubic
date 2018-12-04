@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+{% for q in objects %}
+  <div class="container-fluid vertical-center">
+    <section class="container">
+
+      <div class="col-md-8">
+        <!-- the content -->
+        <p style=" font-size:40px; ">{{q[1]}}</p>
+      </div>
+
+      <div class="col-md-4">
+        <div class="container-page">
+
+          <!-- option 1 ~ 4 -->
+          <button id="op1"class="btn btn-primary">{{q[2]}}</button>
+
+          <button id="op2"class="btn btn-primary">{{q[3]}}</button>
+
+          <button id="op3"class="btn btn-primary">{{q[4]}}</button>
+
+          <button id="op4"class="btn btn-primary">{{q[5]}}</button>
+
+        </div>
+      </div>
+
+    </section>
+  </div>
+{% endfor %}
+{% endblock %}
