@@ -197,22 +197,47 @@ def chapters():
         session["_book"] = book
 
         return render_template("home3.html", objects = objects)
+@app.route("/setsession", methods=['GET', 'POST'])
+def setsession():
+    if request.method == "POST":
+        session["_chapter"] = request.form.get("chapter")
+        return redirect("/test")
 
 @app.route("/test", methods=['GET', 'POST'])
 def text():
-    if request.method == 'POST':
+    # get the session data
+    sub = session["_sub"]
+    book = session["_book"]
+    chapter = session["_chapter"]
 
-        # get the session data
-        sub = session["_sub"]
-        book = session["_book"]
-        session["_chapter"] = request.form.get("chapter")
-        chapter = session["_chapter"]
+    # creat a cursor
+    cur = mysql.connection.cursor()
+    # query the db
+    cur.execute("SELECT * from questions WHERE subID = %s AND book = %s AND chapter = %s ORDER BY RAND() LIMIT 1",
+    (sub, book, chapter))
+    objects = cur.fetchall()
 
-        # creat a cursor
-        cur = mysql.connection.cursor()
-        # query the db
-        cur.execute("SELECT * from questions WHERE subID = %s AND book = %s AND chapter = %s ORDER BY RAND() LIMIT 1",
-        (sub, book, chapter))
-        objects = cur.fetchall()
+    return render_template("test.html", objects = objects)
 
-        return render_template("test.html", objects = objects)
+@app.route("/record", methods=["GET", "POST"])
+def record():
+    # get the result for the question
+    result = request.form.get("result")
+    qid = request.form.get("qid")
+    temp_corrects = request.form.get("corrects")
+    temp_wrongs = request.form.get("wrongs")
+    corrects = int(temp_corrects)
+    wrongs = int(temp_wrongs)
+
+    # creat a cursor
+    cur = mysql.connection.cursor()
+
+    if result == 1:
+        cur.execute("UPDATE questions SET corrects = (%d) WHERE qid = (%s)", (corrects, qid))
+    else:
+        cur.execute("UPDATE questions SET wrongs = (%d) WHERE qid = (%s)", (wrongs, qid))
+
+    # close it
+    cur.close()
+
+    return redirect("/test")

@@ -1,21 +1,31 @@
-<!--the navbar that is always on top-->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container" style=" padding-left:0 ">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/">Qubic</a>
-    </div>
-    <ul class="nav navbar-nav navbar-right">
-        {% if session.user_id %}
-            <ul class="nav navbar-nav navbar-right">
-                <li class="nav-item"><a class="nav-link" href="/home">{{session.user_id}}</a></li>
-                <li class="nav-item"><a class="nav-link" href="/">Log Out</a></li>
-            </ul>
-        {% else %}
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/register"><span class="glyphicon glyphicon-user"></span>Register</a></li>
-                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            </ul>
-        {% endif %}
-    </ul>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <a class="navbar-brand" href="#">Navbar</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    {% if session.user_id %}
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/home">{{session['user_id']}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/">Log out</a>
+        </li>
+      </ul>
+    {% else %}
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/register">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/login">Log in</a>
+        </li>
+      </ul>
+    {% endif %}
   </div>
+
 </nav>

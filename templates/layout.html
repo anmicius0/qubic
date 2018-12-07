@@ -12,10 +12,10 @@
         <link href="static/styles.css" rel="stylesheet"/>
         <link href="static/sign.css" rel="stylesheet"/>
         <!-- // -->
-        
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin ="anonymous">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
@@ -27,13 +27,25 @@
 
         <!-- Social Footer, Colour Matching Icons -->
         <!-- Include Font Awesome Stylesheet in Header -->
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
         <!-- // -->
 
-        <!-- import my js -->
-        <script src="static/myScript.js"></script>
-        <!-- // -->
+
+        <script>
+          function checkanswer(the_id, the_answer){
+            var x = String(the_id);
+            var y = String(the_answer);
+
+            if (x == y){
+              document.getElementById("correct_animation").style.display = "block";
+              document.getElementById("worng_animation").style.display = "none";
+            }
+            else{
+              document.getElementById("correct_animation").style.display = "none";
+              document.getElementById("worng_animation").style.display = "block";
+            }
+          }
+        </script>
 
         <title>Qubic: {% block title %}{% endblock %}</title>
 

@@ -14,7 +14,7 @@
 
       					<div class="box-part text-center">
 
-                  <i class="fa fa-angle-down fa-3x"></i>
+                  <i class="fas fa-angle-down fa-3x"></i>
 
       						<div class="title">
       							<h3>{{i[3]}}</h3>
@@ -25,9 +25,9 @@
       							<span>{{i[4]}}</span>
       						</div>
 
-                  <form action="/test" method="post">
+                  <form action="/setsession" method="post">
         						<div class="form-group" >
-                      <input type="radio" name="chapter" value="{{i[3]}}">
+                      <input type="radio" name="chapter" value="{{i[3]}}" checked="checked" style="display:none">
                     </div>
                     <button type="submit" class="btn btn-primary"> Enter </button>
                   </form>
