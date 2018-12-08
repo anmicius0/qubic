@@ -6,6 +6,10 @@
     display: flex;
     align-items: center;
 }
+.test-op {
+  width: 300px;
+  margin: 10px;
+}
 /*--------------*/
 
 

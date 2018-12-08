@@ -4,6 +4,7 @@ import yaml
 from flask import Flask, flash, redirect, render_template, request, session, g
 from flask_mysqldb import MySQL
 from flask_session import Session
+from functools import wraps
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -21,6 +22,16 @@ app.config['MYSQL_DB'] = db['mysql_db']
 mysql = MySQL(app)
 
 app.secret_key = os.urandom(24)
+
+# define the login_required
+def login_required(f):
+    @wraps(f)
+    def wrap (*args, **kwargs):
+        if 'user_id' in session:
+            return f(*args, **kwargs)
+        else:
+            return redirect('/login')
+    return wrap
 
 @app.before_request
 def before_request():
@@ -114,6 +125,7 @@ def login():
 # it's the home page, let user to chose the subject
 # it pop the session '_sub'
 @app.route("/home")
+@login_required
 def home():
 
     # creat a cursor for mysql
@@ -128,6 +140,7 @@ def home():
 
 # chose the book
 @app.route("/books", methods=['GET', 'POST'])
+@login_required
 def books():
     if request.method == "POST":
 
@@ -146,6 +159,7 @@ def books():
 
 # chose the chapter
 @app.route("/chapters", methods=['GET', 'POST'])
+@login_required
 def chapters():
     if request.method == 'POST':
 
@@ -167,6 +181,7 @@ def chapters():
 
 # after chose the subject,book,chapter then store it all in session
 @app.route("/setsession", methods=['GET', 'POST'])
+@login_required
 def setsession():
     if request.method == "POST":
         session["_chapter"] = request.form.get("chapter")
@@ -174,6 +189,7 @@ def setsession():
 
 # get the question from database randomly
 @app.route("/test", methods=['GET', 'POST'])
+@login_required
 def text():
     # get the session data
     sub = session["_sub"]
@@ -191,6 +207,7 @@ def text():
 
 # after answer a question, record corrects or wrongs
 @app.route("/record", methods=["GET", "POST"])
+@login_required
 def record():
     # get the result for the question
     result = request.form.get("result")
