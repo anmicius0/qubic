@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block title %}
-    Log In
+    Test
 {% endblock %}
 
 {% block main %}
@@ -61,7 +61,7 @@
 
           <form action="/record" method="post">
             <div class="form-group" >
-              <input type="radio" name="result" value= 1 checked="checked" style="display:none">
+              <input type="radio" name="result" value= '1' checked="checked" style="display:none">
               <input type="radio" name="qid" value= '{{q[0]}}' checked="checked" style="display:none">
               <input type="radio" name="corrects" value= '{{q[8]}}' checked="checked" style="display:none">
               <input type="radio" name="wrongs" value= '{{q[9]}}' checked="checked" style="display:none">
@@ -96,10 +96,10 @@
 
           <form action="/record" method="post">
             <div class="form-group" >
-              <input type="checkbox" name="result" value= 0 checked="checked" style="display:none">
+              <input type="checkbox" name="result" value= '0' checked="checked" style="display:none">
               <input type="checkbox" name="qid" value= '{{q[0]}}' checked="checked" style="display:none">
               <input type="checkbox" name="corrects" value= '{{q[8]}}' checked="checked" style="display:none">
-              <input type="checkbox" name="wrongs" value= ''{{q[9]}}'' checked="checked" style="display:none">
+              <input type="checkbox" name="wrongs" value= '{{q[9]}}' checked="checked" style="display:none">
             </div>
             <button type="submit" class="btn btn-primary"> Enter </button>
           </form>

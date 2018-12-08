@@ -224,18 +224,18 @@ def record():
     # get the result for the question
     result = request.form.get("result")
     qid = request.form.get("qid")
-    temp_corrects = request.form.get("corrects")
-    temp_wrongs = request.form.get("wrongs")
-    corrects = int(temp_corrects)
-    wrongs = int(temp_wrongs)
+    corrects = (int(request.form.get("corrects")) + 1)
+    wrongs = (int(request.form.get("wrongs")) + 1)
 
     # creat a cursor
     cur = mysql.connection.cursor()
 
-    if result == 1:
-        cur.execute("UPDATE questions SET corrects = (%d) WHERE qid = (%s)", (corrects, qid))
+    if result == '1':
+        cur.execute("UPDATE questions SET corrects = {} WHERE qid = {}".format(corrects, qid))
     else:
-        cur.execute("UPDATE questions SET wrongs = (%d) WHERE qid = (%s)", (wrongs, qid))
+        cur.execute("UPDATE questions SET wrongs = {} WHERE qid = {}".format(wrongs, qid))
+    # commit the changes to the database
+    mysql.connection.commit()
 
     # close it
     cur.close()
