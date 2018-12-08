@@ -11,20 +11,21 @@
 
             {% for i in objects %}
     			    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-
       					<div class="box-part text-center">
 
-                  <i class="{{i[3]}}" aria-hidden="true"></i>
+                  <i class="fab fa-audible fa-3x"></i>
 
       						<div class="title">
       							<h3>{{i[1]}}</h3>
       						</div>
 
+                  <!-- the description -->
       						<div class="text">
       							<span>{{i[2]}}</span>
       						</div>
 
 
+                  <!-- use a hidden radio to submit the value :) -->
                   <form action="/books" method="post">
         						<div class="form-group" >
                       <input type="radio" name="subject" value="{{i[0]}}" checked="checked" style="display:none">
@@ -33,9 +34,9 @@
                   </form>
 
       					 </div>
-
       				</div>
             {% endfor %}
+
       		</div>
         </div>
     </div>

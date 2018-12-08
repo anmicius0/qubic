@@ -11,7 +11,6 @@
 
             {% for i in objects %}
     			    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-
       					<div class="box-part text-center">
 
                   <i class="fas fa-book fa-3x"></i>
@@ -25,14 +24,15 @@
       							<span>{{i[3]}}</span>
       						</div>
 
+                  <!-- use a hidden radio to submit the value -->
                   <form action="/chapters" method="post">
         						<div class="form-group" >
                       <input type="radio" name="book" value="{{i[2]}}" checked="checked" style="display:none">
                     </div>
                     <button type="submit" class="btn btn-primary"> Enter </button>
                   </form>
-      					 </div>
 
+      					 </div>
       				</div>
             {% endfor %}
 

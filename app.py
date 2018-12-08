@@ -28,12 +28,14 @@ def before_request():
     if 'user_id' in session:
         g.user_id = session['user_id']
 
+
 @app.route("/")
 def welcome():
     if 'user_id' in session:
         return redirect('/home')
     else:
         return render_template('index.html')
+
 
 # let user register for this system
 @app.route("/register", methods=["GET", "POST"])
@@ -50,9 +52,7 @@ def register():
             # creat a cursor for the db
             cur = mysql.connection.cursor()
             # insert data into 'users'
-            result = cur.execute("INSERT INTO users(username, hashpass) VALUES(%s, %s)", (username, hashpass))
-            # commit the changes to the database
-            mysql.connection.commit()
+            cur.execute("INSERT INTO users(username, hashpass) VALUES(%s, %s)", (username, hashpass))
             # commit the changes to the database
             mysql.connection.commit()
             # close the cursor
@@ -65,6 +65,7 @@ def register():
     else:
         return render_template("register.html")
 
+# let user to login, it also clean the session of 'user_id' 'user_name'
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -75,13 +76,6 @@ def login():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-
-        # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
-        # Ensure password was submitted
-        elif not request.form.get("password"):
-            return apology("must provide password", 403)
 
         # store the input into values
         username = request.form.get("username")
@@ -117,23 +111,22 @@ def login():
     else:
         return render_template("login.html")
 
+# it's the home page, let user to chose the subject
+# it pop the session '_sub'
 @app.route("/home")
 def home():
-
-    # Forget any _sub
-    session.pop('_sub', None)
 
     # creat a cursor for mysql
     cur = mysql.connection.cursor()
     # Query database for subjects
     cur.execute("SELECT * FROM subjects ORDER BY subject")
     objects = cur.fetchall()
-
     # close the cursor
     cur.close()
 
     return render_template("home.html", objects = objects)
 
+# chose the book
 @app.route("/books", methods=['GET', 'POST'])
 def books():
     if request.method == "POST":
@@ -151,6 +144,7 @@ def books():
 
         return render_template("home2.html", objects = objects)
 
+# chose the chapter
 @app.route("/chapters", methods=['GET', 'POST'])
 def chapters():
     if request.method == 'POST':
@@ -170,12 +164,15 @@ def chapters():
         session["_book"] = book
 
         return render_template("home3.html", objects = objects)
+
+# after chose the subject,book,chapter then store it all in session
 @app.route("/setsession", methods=['GET', 'POST'])
 def setsession():
     if request.method == "POST":
         session["_chapter"] = request.form.get("chapter")
         return redirect("/test")
 
+# get the question from database randomly
 @app.route("/test", methods=['GET', 'POST'])
 def text():
     # get the session data
@@ -192,6 +189,7 @@ def text():
 
     return render_template("test.html", objects = objects)
 
+# after answer a question, record corrects or wrongs
 @app.route("/record", methods=["GET", "POST"])
 def record():
     # get the result for the question
