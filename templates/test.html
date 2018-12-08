@@ -17,22 +17,17 @@
 
         <div class="col-md-8">
           <!-- the content -->
-          <p style=" font-size:40px; ">{{q[1]}}</p>
-
+          <p style=" font-size:45px; ">{{q[1]}}</p>
+          <p style=" font-size:18px; ">Answer rate: {{ q[8] * 100 / (q[9] + q[8]) }} % </p>
         </div>
 
         <div class="col-md-4">
           <div id="op_block" class="container-page">
-
-            <!-- option 1 ~ 4 -->
-            <button id="op1" type="button" class="btn btn-primary" onclick="checkanswer(this.id, '{{q[6]}}')">{{q[2]}}</button>
-
-            <button id="op2" type="button" class="btn btn-primary" onclick="checkanswer(this.id, '{{q[6]}}')">{{q[3]}}</button>
-
-            <button id="op3" type="button" class="btn btn-primary" onclick="checkanswer(this.id, '{{q[6]}}')">{{q[4]}}</button>
-
-            <button id="op4" type="button" class="btn btn-primary" onclick="checkanswer(this.id, '{{q[6]}}')">{{q[5]}}</button>
-
+            {% for i in range(4) %}
+              <div>
+                <button id="op{{i+2}}" type="button" class="btn btn-primary" onclick="checkanswer(this.id, '{{q[6]}}')">{{q[i+2]}}</button>
+              </div>
+            {% endfor %}
           </div>
         </div>
 

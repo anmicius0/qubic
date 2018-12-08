@@ -22,23 +22,18 @@ mysql = MySQL(app)
 
 app.secret_key = os.urandom(24)
 
-# Ensure responses aren't cached
-@app.after_request
-def after_request(response):
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cache"
-    return response
-
 @app.before_request
 def before_request():
     g.user_id = None
     if 'user_id' in session:
         g.user_id = session['user_id']
 
-@app.route('/')
+@app.route("/")
 def welcome():
-    return render_template("index.html")
+    if 'user_id' in session:
+        return redirect('/home')
+    else:
+        return render_template('index.html')
 
 # let user register for this system
 @app.route("/register", methods=["GET", "POST"])
@@ -48,47 +43,23 @@ def register():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("Missing USER NAME")
-        # Ensure password was submitted
-        elif not request.form.get("password"):
-            return apology("MISSING PASSWORD")
-        # Ensure confirmation was submitted
-        elif not request.form.get("confirmation") == request.form.get("password"):
-            return apology("PASSWORDD DOESN'T MATCH")
-
         username = request.form.get("username")
         hashpass = generate_password_hash(request.form.get("confirmation"))
 
-        # creat a cursor for the db
-        cur = mysql.connection.cursor()
-        # insert data into 'users'
-        result = cur.execute("INSERT INTO users(username, hashpass) VALUES(%s, %s)", (username, hashpass))
-        # commit the changes to the database
-        mysql.connection.commit()
-        # close the cursor
-        cur.close()
-
-        # start to login
-        # Forget any user_id
-        session.pop('user_id', None)
-
-        # creat a cursor for the db
-        cur = mysql.connection.cursor()
-        # Query database for username
-        resultValue = cur.execute("SELECT * FROM users WHERE username = %s",[username])
-        if resultValue == 1:
-            userDetail = cur.fetchall()
-            # Remember which user has logged in
-            for row in userDetail:
-                session["user_id"] = row[0]
-        # close the cursor
-        cur.close()
-
-        # Redirect user to home page
-        return redirect("/home")
-
+        try:
+            # creat a cursor for the db
+            cur = mysql.connection.cursor()
+            # insert data into 'users'
+            result = cur.execute("INSERT INTO users(username, hashpass) VALUES(%s, %s)", (username, hashpass))
+            # commit the changes to the database
+            mysql.connection.commit()
+            # commit the changes to the database
+            mysql.connection.commit()
+            # close the cursor
+            cur.close()
+            return redirect('/login')
+        except:
+            return redirect('/register')
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -100,6 +71,7 @@ def login():
 
     # Forget any user_id
     session.pop('user_id', None)
+    session.pop('user_name', None)
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -133,6 +105,7 @@ def login():
                 return redirect("/login")
             else:
                 session["user_id"] = row[0]
+                session['user_name'] = row[1]
 
         # close the cursor
         cur.close()
