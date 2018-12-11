@@ -229,3 +229,29 @@ def record():
     cur.close()
 
     return redirect("/test")
+
+@app.route("/submit-question", methods=["GET", "POST"])
+@login_required
+def submit_question():
+    if request.method == "POST":
+        subID = request.form.get('subID')
+        book = int(request.form.get('book'))
+        chapter = int(request.form.get('chapter'))
+        content = request.form.get('content')
+        op1 = request.form.get('op1')
+        op2 = request.form.get('op2')
+        op3 = request.form.get('op3')
+        op4 = request.form.get('op4')
+        answer = request.form.get('answer')
+        solution = request.form.get('solution')
+
+        # make a cursor
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO questions(content, op1, op2, op3, op4, answer, solution, subID, book, chapter) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            (content, op1, op2, op3, op4, answer, solution, subID, book, chapter))
+        mysql.connection.commit()
+        cur.close()
+        return redirect("/submit-question")
+
+    else:
+        return render_template("submit-question.html")

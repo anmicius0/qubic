@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  Submit question
+{% endblock %}
+
+{% block main %}
+<form action="/submit-question" method="post">
+  <div class="container-fluid vertical-center">
+    <section class="container">
+      <div class="container-page">
+
+        <div class="col-md-3">
+        </div>
+
+        <div class="col-md-6">
+          <h2> submit a question</h2>
+
+          <div class="form-group col-lg-4">
+            <label>subID (first 3 chr)</label>
+            <input type="text" name="subID" class="form-control" placeholder="subID" required>
+          </div>
+          <div class="form-group col-lg-4">
+            <label>Book number</label>
+            <input type="text" name="book" class="form-control" placeholder="book" required>
+          </div>
+          <div class="form-group col-lg-4">
+            <label>Chapter number</label>
+            <input type="text" name="chapter" class="form-control" placeholder="chapter" required>
+          </div>
+
+          <div class="form-group col-lg-12">
+            <label>Content of the question</label>
+            <input type="text" name="content" class="form-control" placeholder="content" required>
+          </div>
+
+          <div class="form-group col-lg-3">
+            <label>Option 1</label>
+            <input type="text" name="op1" class="form-control" placeholder="op1" required>
+          </div>
+          <div class="form-group col-lg-3">
+            <label>Option 2</label>
+            <input type="text" name="op2" class="form-control" placeholder="op2" required>
+          </div>
+          <div class="form-group col-lg-3">
+            <label>Option 3</label>
+            <input type="text" name="op3" class="form-control" placeholder="op3" required>
+          </div>
+          <div class="form-group col-lg-3">
+            <label>Option 4</label>
+            <input type="text" name="op4" class="form-control" placeholder="op4" required>
+          </div>
+
+          <div class="form-group col-lg-6">
+            <label>The answer</label>
+            <select class="form-control" name="answer">
+              <option value="op1">Option 1</option>
+              <option value="op2">Option 2</option>
+              <option value="op3">Option 3</option>
+              <option value="op4">Option 4</option>
+            </select>
+          </div>
+          <div class="form-group col-lg-6">
+            <label>The way to solve this question</label>
+            <input type="text" name="solution" class="form-control" placeholder="solution">
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit :)</button>
+
+        </div>
+
+        <div class="col-md-3">
+        </div>
+      </div>
+    </section>
+  </div>
+</form>
+{% endblock %}
