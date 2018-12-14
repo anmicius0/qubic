@@ -14,6 +14,6 @@ function checkanswer(the_id, the_answer){
   }
 }
 
-function thank_you(){
-
+function submit(the_id){
+  document.getElementById(the_id).submit(); 
 }

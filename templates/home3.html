@@ -13,20 +13,24 @@
     			    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
       					<div class="box-part text-center">
 
-                  <i class="fas fa-angle-down fa-3x"></i>
+                  <div class="centerBox">
+                    <div class="categoryWrapper">
+                      <h1>CHAPTER {{i[3]}}</h1>
+                      <button onclick="submit('{{i[3]}}')">
+                        <span>
+                          <span>
+                            <span data-attr-span="ENTER">
+                              {{i[4]}}
+                            </span>
+                          </span>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
 
-      						<div class="title">
-      							<h3>{{i[3]}}</h3>
-      						</div>
-
-                  <!-- the descruption -->
-                  <div class="text">
-      							<span>{{i[4]}}</span>
-      						</div>
-
-                  <form action="/setsession" method="post">
+                  <form action="/setsession" method="post" style="display:none">
         						<div class="form-group" >
-                      <input type="radio" name="chapter" value="{{i[3]}}" checked="checked" style="display:none">
+                      <input type="radio" name="chapter" value="{{i[3]}}" checked="checked">
                     </div>
                     <button type="submit" class="btn btn-primary"> Enter </button>
                   </form>

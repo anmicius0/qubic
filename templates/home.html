@@ -13,22 +13,25 @@
     			    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
       					<div class="box-part text-center">
 
-                  <i class="fab fa-audible fa-3x"></i>
-
-      						<div class="title">
-      							<h3>{{i[1]}}</h3>
-      						</div>
-
-                  <!-- the description -->
-      						<div class="text">
-      							<span>{{i[2]}}</span>
-      						</div>
-
+                  <div class="centerBox">
+                    <div class="categoryWrapper">
+                      <h1>{{i[1]}}</h1>
+                      <button onclick="submit('{{i[0]}}')">
+                        <span>
+                          <span>
+                            <span data-attr-span="ENTER">
+                              {{i[2]}}
+                            </span>
+                          </span>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
 
                   <!-- use a hidden radio to submit the value :) -->
-                  <form action="/books" method="post">
-        						<div class="form-group" >
-                      <input type="radio" name="subject" value="{{i[0]}}" checked="checked" style="display:none">
+                  <form action="/books" method="post" id="{{i[0]}}" style="display:none">
+                    <div class="form-group" >
+                      <input type="radio" name="subject" value="{{i[0]}}" checked="checked">
                     </div>
                     <button type="submit" class="btn btn-primary"> Enter </button>
                   </form>
