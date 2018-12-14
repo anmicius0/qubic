@@ -245,13 +245,17 @@ def submit_question():
         answer = request.form.get('answer')
         solution = request.form.get('solution')
 
-        # make a cursor
-        cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO questions(content, op1, op2, op3, op4, answer, solution, subID, book, chapter) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-            (content, op1, op2, op3, op4, answer, solution, subID, book, chapter))
-        mysql.connection.commit()
-        cur.close()
-        return redirect("/submit-question")
-
+        try:
+            # make a cursor
+            cur = mysql.connection.cursor()
+            cur.execute("INSERT INTO questions(content, op1, op2, op3, op4, answer, solution, subID, book, chapter) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                (content, op1, op2, op3, op4, answer, solution, subID, book, chapter))
+            mysql.connection.commit()
+            cur.close()
+            flash("Submit successfully")
+            return redirect("/submit-question")
+        except:
+            flash("Submit failed")
+            return redirect("/submit-question")
     else:
         return render_template("submit-question.html")

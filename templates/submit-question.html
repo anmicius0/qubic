@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-<form action="/submit-question" method="post">
+<form id="submit-question-form" action="/submit-question" method="post">
   <div class="container-fluid vertical-center">
     <section class="container">
       <div class="container-page">
@@ -63,9 +63,9 @@
           <div class="form-group col-lg-6">
             <label>The way to solve this question</label>
             <input type="text" name="solution" class="form-control" placeholder="solution">
-          </div>
+            </div>
 
-          <button type="submit" class="btn btn-primary">Submit :)</button>
+          <button class="btn btn-primary" onclick="thank_you()">Submit :)</button>
 
         </div>
 

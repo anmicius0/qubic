@@ -1,195 +1,279 @@
-$head-font = 'Montserrat', sans-serif
-$main-font = 'Open Sans', sans-serif
-$main-color = rgba(76,175,80,1)
-$error-color = rgba(244,67,54,1)
-
-animated(name, duration)
-  -webkit-animation name duration
-  -moz-animation name duration
-  -o-animation name duration
-  animation name duration
-
-borderRadius(r)
-	-webkit-border-radius r
-	-moz-border-radius r
-	border-radius r
-
-transformation(s)
-		-ms-transform scale(s, s)
-		-webkit-transform scale(s, s)
-		transform scale(s, s)
-
-transitions(t)
-	-webkit-transition all t ease-in-out
-	transition all t ease-in-out
-
-html, body {
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+.check_mark {
+  width: 80px;
+  height: 130px;
+  margin: 0 auto;
 }
 
-body
-	overflow hidden
+button {
+  cursor: pointer;
+  margin-left: 15px;
+}
 
-.background
-	position absolute
-	width 100%
-	height 100%
-	top 0
-	left 0
-	//-webkit-filter blur(5px)
-	//filter blur(5px)
-	background  linear-gradient(transparent, rgba(0, 0, 0, .5)), url("https://images.pexels.com/photos/4827/nature-forest-trees-fog.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
-	background-size: cover;
-	background-position: center;
+.hide{
+  display:none;
+}
 
-.modalbox
-	&.success,
-	&.error
-		box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-		transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-		borderRadius(2px)
-		background white
-		padding 25px 25px 15px
-		//border 1px solid #ddd
-		text-align center
-		&.animate
-			//animated(plunge, 1s)
-			.icon
-				animated(fall-in, .75s)
-				box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-				//animation-delay .6s
-		h1
-			font-family $head-font
-		p
-			font-family $main-font
-		button,
-		button:active,
-		button:focus
-			transitions(.1s)
-			borderRadius(30px)
-			margin-top 15px
-			width 80%
-			background transparent
-			color $main-color
-			border-color $main-color
-			outline none
-			&:hover
-				color white
-				background $main-color
-				border-color transparent
-		.icon
-			position relative
-			margin 0 auto
-			margin-top -75px
-			background $main-color
-			height 100px
-			width 100px
-			border-radius 50%
-			span
-				postion absolute
-				font-size 4em
-				color white
-				text-align center
-				padding-top 20px
-	&.error
-		button,
-		button:active,
-		button:focus
-			color $error-color
-			border-color $error-color
-			&:hover
-				color white
-				background $error-color
-		.icon
-			background $error-color
-			span
-				padding-top 25px
+.sa-icon {
+  width: 80px;
+  height: 80px;
+  border: 4px solid gray;
+  -webkit-border-radius: 40px;
+  border-radius: 40px;
+  border-radius: 50%;
+  margin: 20px auto;
+  padding: 0;
+  position: relative;
+  box-sizing: content-box;
+}
 
-.center
-	float none
-	margin-left auto
-	margin-right auto
+.sa-icon.sa-success {
+  border-color: #4CAF50;
+}
 
-	.change
-		clearn both
-		display block
-		font-size 10px
-		color #ccc
-		margin-top 10px
+.sa-icon.sa-success::before, .sa-icon.sa-success::after {
+  content: '';
+  -webkit-border-radius: 40px;
+  border-radius: 40px;
+  border-radius: 50%;
+  position: absolute;
+  width: 60px;
+  height: 120px;
+  background: white;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
 
-	/* stupid browser compat. smh */
-@-webkit-keyframes fall-in
-	0%
-		transformation(3)
-		opacity 0
-	50%
-		transformation(1)
-		opacity 1
-	60%
-		transformation(1.1)
-	100%
-		transformation(1)
+.sa-icon.sa-success::before {
+  -webkit-border-radius: 120px 0 0 120px;
+  border-radius: 120px 0 0 120px;
+  top: -7px;
+  left: -33px;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  -webkit-transform-origin: 60px 60px;
+  transform-origin: 60px 60px;
+}
 
-@-moz-keyframes fall-in
-	0%
-		transformation(3)
-		opacity 0
-	50%
-		transformation(1)
-		opacity 1
-	60%
-		transformation(1.1)
-	100%
-		transformation(1)
+.sa-icon.sa-success::after {
+  -webkit-border-radius: 0 120px 120px 0;
+  border-radius: 0 120px 120px 0;
+  top: -11px;
+  left: 30px;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  -webkit-transform-origin: 0px 60px;
+  transform-origin: 0px 60px;
+}
 
-@-o-keyframes fall-in
-	0%
-		transformation(3)
-		opacity 0
-	50%
-		transformation(1)
-		opacity 1
-	60%
-		transformation(1.1)
-	100%
-		transformation(1)
+.sa-icon.sa-success .sa-placeholder {
+  width: 80px;
+  height: 80px;
+  border: 4px solid rgba(76, 175, 80, .5);
+  -webkit-border-radius: 40px;
+  border-radius: 40px;
+  border-radius: 50%;
+  box-sizing: content-box;
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  z-index: 2;
+}
 
-@keyframes fall-in
-	0%
-		transformation(3)
-		opacity 0
-	50%
-		transformation(1)
-		opacity 1
-	60%
-		transformation(1.1)
-	100%
-		transformation(1)
+.sa-icon.sa-success .sa-fix {
+  width: 5px;
+  height: 90px;
+  background-color: white;
+  position: absolute;
+  left: 28px;
+  top: 8px;
+  z-index: 1;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
 
-// currently not using plunge.
-@-webkit-keyframes plunge
-	0%
-		margin-top -100%
-	100%
-		margin-top 25%
+.sa-icon.sa-success.animate::after {
+  -webkit-animation: rotatePlaceholder 4.25s ease-in;
+  animation: rotatePlaceholder 4.25s ease-in;
+}
 
-@-moz-keyframes plunge
-	0%
-		margin-top -100%
-	100%
-		margin-top 25%
+.sa-icon.sa-success {
+  border-color: transparent\9;
+}
+.sa-icon.sa-success .sa-line.sa-tip {
+  -ms-transform: rotate(45deg) \9;
+}
+.sa-icon.sa-success .sa-line.sa-long {
+  -ms-transform: rotate(-45deg) \9;
+}
 
-@-o-keyframes plunge
-	0%
-		margin-top -100%
-	100%
-		margin-top 25%
+.animateSuccessTip {
+  -webkit-animation: animateSuccessTip 0.75s;
+  animation: animateSuccessTip 0.75s;
+}
 
-@keyframes plunge
-	0%
-		margin-top -100%
-	100%
-		margin-top 15%
+.animateSuccessLong {
+  -webkit-animation: animateSuccessLong 0.75s;
+  animation: animateSuccessLong 0.75s;
+}
+
+@-webkit-keyframes animateSuccessLong {
+  0% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  65% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  84% {
+    width: 55px;
+    right: 0px;
+    top: 35px;
+  }
+  100% {
+    width: 47px;
+    right: 8px;
+    top: 38px;
+  }
+}
+@-webkit-keyframes animateSuccessTip {
+  0% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  54% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  70% {
+    width: 50px;
+    left: -8px;
+    top: 37px;
+  }
+  84% {
+    width: 17px;
+    left: 21px;
+    top: 48px;
+  }
+  100% {
+    width: 25px;
+    left: 14px;
+    top: 45px;
+  }
+}
+@keyframes animateSuccessTip {
+  0% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  54% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  70% {
+    width: 50px;
+    left: -8px;
+    top: 37px;
+  }
+  84% {
+    width: 17px;
+    left: 21px;
+    top: 48px;
+  }
+  100% {
+    width: 25px;
+    left: 14px;
+    top: 45px;
+  }
+}
+
+@keyframes animateSuccessLong {
+  0% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  65% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  84% {
+    width: 55px;
+    right: 0px;
+    top: 35px;
+  }
+  100% {
+    width: 47px;
+    right: 8px;
+    top: 38px;
+  }
+}
+
+.sa-icon.sa-success .sa-line {
+  height: 5px;
+  background-color: #4CAF50;
+  display: block;
+  border-radius: 2px;
+  position: absolute;
+  z-index: 2;
+}
+
+.sa-icon.sa-success .sa-line.sa-tip {
+  width: 25px;
+  left: 14px;
+  top: 46px;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.sa-icon.sa-success .sa-line.sa-long {
+  width: 47px;
+  right: 8px;
+  top: 38px;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+@-webkit-keyframes rotatePlaceholder {
+  0% {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+  }
+  5% {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+  }
+  12% {
+    transform: rotate(-405deg);
+    -webkit-transform: rotate(-405deg);
+  }
+  100% {
+    transform: rotate(-405deg);
+    -webkit-transform: rotate(-405deg);
+  }
+}
+@keyframes rotatePlaceholder {
+  0% {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+  }
+  5% {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+  }
+  12% {
+    transform: rotate(-405deg);
+    -webkit-transform: rotate(-405deg);
+  }
+  100% {
+    transform: rotate(-405deg);
+    -webkit-transform: rotate(-405deg);
+  }
+}

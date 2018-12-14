@@ -13,3 +13,7 @@ function checkanswer(the_id, the_answer){
     document.getElementById("worng_animation").style.display = "block";
   }
 }
+
+function thank_you(){
+
+}
