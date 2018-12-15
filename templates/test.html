@@ -12,99 +12,58 @@
 
 {% block main %}
   {% for q in objects %}
-    <div id="op_block" class="container-fluid vertical-center">
-      <section class="container">
+    <div id="op_block" class="box">
+      <div class="container">
+        <div class="row">
 
-        <div class="col-md-8">
-          <!-- the content -->
-          <p style=" font-size:45px; ">{{q[1]}}</p>
-          <p style=" font-size:18px; ">Answer rate: {{ q[8] * 100 / (q[9] + q[8]) }} % </p>
-        </div>
+          <div class=" col-md-8 col-xs-12">
+            <div class="box-part text-center">
+              <div class="centerBox">
+                <div class="categoryWrapper">
+                  <!-- the content -->
+                  <p class="question">{{q[1]}}</p>
 
-        <div class="col-md-4">
-          <div id="op_block" class="container-page">
-            {% for i in range(4) %}
-            <div id="op{{i+1}}" class="svg-wrapper" onclick="checkanswer(this.id, '{{q[6]}}')">
-              <svg height="60" width="320" xmlns="http://www.w3.org/2000/svg">
-                <rect class="shape" height="60" width="320" />
-                <div class="text">{{q[i+2]}}</div>
-              </svg>
+                  <button>
+                    <span>
+                      <span>
+                        <span data-attr-span="Answer rate: {{ q[8] * 100 / (q[9] + q[8]) }} %">
+                          Answer rate: {{ q[8] * 100 / (q[9] + q[8]) }} %
+                        </span>
+                      </span>
+                    </span>
+                  </button>
+
+                </div>
+              </div>
             </div>
-            {% endfor %}
           </div>
-        </div>
 
-      </section>
+          <div class="col-md-4 col-xs-12">
+              {% for i in range(4) %}
+              <div id="op{{i+1}}" class="option" onclick="checkanswer(this.id, '{{q[6]}}', '{{q[7]}}')" >
+                <div>{{q[i+2]}}</div>
+              </div>
+              {% endfor %}
+          </div>
+
+        </div>
+      </div
     </div>
 
     <!-- correct answer animation block -->
-    <div id="correct_animation" class="container-fluid vertical-center" style="display:none">
-      <section class="container">
-
-        <div class="col-md-5">
-          <div class="conrainer">
-            {% include "includes/_success_animation.html" %}
-          </div>
-        </div>
-
-        <div class="col-md-7">
-
-          <div>
-            <p style=" font-size:40px; "> {{q[6]}} </p>
-          </div>
-
-          <div>
-            <p id="solution_block" style=" font-size:30px; "> {{q[7]}} </p>
-          </div>
-
-          <form action="/record" method="post">
-            <div class="form-group" >
-              <input type="radio" name="result" value= '1' checked="checked" style="display:none">
-              <input type="radio" name="qid" value= '{{q[0]}}' checked="checked" style="display:none">
-              <input type="radio" name="corrects" value= '{{q[8]}}' checked="checked" style="display:none">
-              <input type="radio" name="wrongs" value= '{{q[9]}}' checked="checked" style="display:none">
-            </div>
-            <button type="submit" class="btn btn-primary"> Next </button>
-          </form>
-
-        </div>
-
-      </section>
-    </div>
+    <form id="correct-record"action="/record" method="post" style="display:none">
+       <input type="radio" name="result" value= '1' checked="checked">
+       <input type="radio" name="qid" value= '{{q[0]}}' checked="checked">
+       <input type="radio" name="corrects" value= '{{q[8]}}' checked="checked">
+       <input type="radio" name="wrongs" value= '{{q[9]}}' checked="checked">
+    </form>
 
     <!-- the wrong animation block -->
-    <div id="worng_animation" class="container-fluid vertical-center" style="display:none">
-      <section class="container">
-
-        <div class="col-md-5">
-          <div class="conrainer">
-            {% include "includes/_wrong_animation.html" %}
-          </div>
-        </div>
-
-        <div class="col-md-7">
-
-          <div>
-            <p style=" font-size:40px; "> {{q[6]}} </p>
-          </div>
-
-          <div>
-            <p id="solution_block" style=" font-size:30px; "> {{q[7]}} </p>
-          </div>
-
-          <form action="/record" method="post">
-            <div class="form-group" >
-              <input type="checkbox" name="result" value= '0' checked="checked" style="display:none">
-              <input type="checkbox" name="qid" value= '{{q[0]}}' checked="checked" style="display:none">
-              <input type="checkbox" name="corrects" value= '{{q[8]}}' checked="checked" style="display:none">
-              <input type="checkbox" name="wrongs" value= '{{q[9]}}' checked="checked" style="display:none">
-            </div>
-            <button type="submit" class="btn btn-primary"> Next </button>
-          </form>
-
-        </div>
-
-      </section>
-    </div>
+    <form id="wrong-record" action="/record" method="post" style="display:none">
+        <input type="checkbox" name="result" value= '0' checked="checked">
+        <input type="checkbox" name="qid" value= '{{q[0]}}' checked="checked">
+        <input type="checkbox" name="corrects" value= '{{q[8]}}' checked="checked">
+        <input type="checkbox" name="wrongs" value= '{{q[9]}}' checked="checked">
+    </form>
   {% endfor %}
 {% endblock %}

@@ -1,4 +1,10 @@
 /* my own css*/
+.index-card{
+  min-height: 80%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 80vh; /* These two lines are counted as one :-)       */
+  display: flex;
+  align-items: center;
+}
 .vertical-center {
     min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
     min-height: 100vh; /* These two lines are counted as one :-)       */
@@ -24,6 +30,22 @@
   text-decoration:none;
   color:#16151b;
   font-size:20px;
+  position:relative;
+}
+.question {
+  font-family: 'Oswald', sans-serif;
+  font-weight:300;
+  text-decoration:none;
+  color:#16151b;
+  font-size:60px;
+  position:relative;
+}
+.answer-rate {
+  font-family: 'Open Sans', sans-serif;
+  font-weight:lighter;
+  text-decoration:none;
+  color:#16151b;
+  font-size:18px;
   position:relative;
 }
 /*--------------*/
@@ -140,7 +162,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a29ca9', end
 	border-left: none;
 	border-bottom: none;
 
-	    transition: height 0.15s ease-out, width 0.15s ease-out 0.15s;
+	    transition: height 0.15s ease-out, width 0.light15s ease-out 0.15s;
 }
 
 .categoryWrapper:hover button > span:after{
