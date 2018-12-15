@@ -24,9 +24,12 @@
         <div class="col-md-4">
           <div id="op_block" class="container-page">
             {% for i in range(4) %}
-              <div>
-                <button id="op{{i+1}}" type="button" class="btn btn-primary test-option" onclick="checkanswer(this.id, '{{q[6]}}')">{{q[i+2]}}</button>
-              </div>
+            <div id="op{{i+1}}" class="svg-wrapper" onclick="checkanswer(this.id, '{{q[6]}}')">
+              <svg height="60" width="320" xmlns="http://www.w3.org/2000/svg">
+                <rect class="shape" height="60" width="320" />
+                <div class="text">{{q[i+2]}}</div>
+              </svg>
+            </div>
             {% endfor %}
           </div>
         </div>

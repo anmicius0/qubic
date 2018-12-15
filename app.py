@@ -70,6 +70,7 @@ def register():
             cur.close()
             return redirect('/login')
         except:
+            flash("register failed")
             return redirect('/register')
 
     # User reached route via GET (as by clicking a link or via redirect)
@@ -107,6 +108,7 @@ def login():
         for row in userDetail:
             # check the hash
             if not check_password_hash(row[2], password):
+                flash("Wrong password")
                 return redirect("/login")
             else:
                 session["user_id"] = row[0]
