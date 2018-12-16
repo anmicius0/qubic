@@ -5,6 +5,7 @@ from flask import Flask, flash, redirect, render_template, request, session, g, 
 from flask_mysqldb import MySQL
 from flask_session import Session
 from functools import wraps
+from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -19,6 +20,12 @@ app.config['MYSQL_DB'] = db['mysql_db']
 mysql = MySQL(app)
 
 app.secret_key = os.urandom(24)
+
+# Configure session to use filesystem (instead of signed cookies)
+app.config["SESSION_FILE_DIR"] = mkdtemp()
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 # define the login_required
 def login_required(f):
