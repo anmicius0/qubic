@@ -109,38 +109,33 @@ def login():
 # login_required
 @app.route("/home")
 def home():
-    if not session['user_id']:
-        return redirect(url_for('login'))
-    else:
-        # creat a cursor for mysql
-        cur = mysql.connection.cursor()
-        # Query database for subjects
-        cur.execute("SELECT * FROM subjects ORDER BY subject")
-        objects = cur.fetchall()
-        # close the cursor
-        cur.close()
+    # creat a cursor for mysql
+    cur = mysql.connection.cursor()
+    # Query database for subjects
+    cur.execute("SELECT * FROM subjects ORDER BY subject")
+    objects = cur.fetchall()
+    # close the cursor
+    cur.close()
 
-        return render_template("home.html", objects = objects)
+    return render_template("home.html", objects = objects)
 
 # chose the book
 @app.route("/books", methods=['POST'])
 def books():
-    if request.method == "POST":
+    # get the form data
+    sub = request.form.get("subject")
 
-        # get the form data
-        sub = request.form.get("subject")
+    # creat a cursor
+    cur = mysql.connection.cursor()
+    # query db for books
+    cur.execute("SELECT * from books WHERE subID = %s ORDER BY book", [sub])
+    objects = cur.fetchall()
 
-        # creat a cursor
-        cur = mysql.connection.cursor()
-        # query db for books
-        cur.execute("SELECT * from books WHERE subID = %s ORDER BY book", [sub])
-        objects = cur.fetchall()
+    # store the subject into a cookie
+    resp = make_response(render_template("home2.html", objects = objects))
+    resp.set_cookie('sub', sub)
 
-        # store the subject into a cookie
-        resp = make_response(render_template("home2.html", objects = objects))
-        resp.set_cookie('sub', sub)
-
-        return resp
+    return resp
 
 # chose the chapter
 @app.route("/chapters", methods=['POST'])
@@ -177,22 +172,19 @@ def setsession():
 # login_required
 @app.route("/test", methods=['GET','POST'])
 def text():
-    if not session['user_id']:
-        return redirect(url_for('login'))
-    else:
-        # get the session data
-        sub = request.cookies.get('sub')
-        book = request.cookies.get('book')
-        chapter = request.cookies.get('chapter')
+    # get the session data
+    sub = request.cookies.get('sub')
+    book = request.cookies.get('book')
+    chapter = request.cookies.get('chapter')
 
-        # creat a cursor
-        cur = mysql.connection.cursor()
-        # query the db
-        cur.execute("SELECT * from questions WHERE subID = %s AND book = %s AND chapter = %s ORDER BY RAND() LIMIT 1",
-        (sub, book, chapter))
-        objects = cur.fetchall()
+    # creat a cursor
+    cur = mysql.connection.cursor()
+    # query the db
+    cur.execute("SELECT * from questions WHERE subID = %s AND book = %s AND chapter = %s ORDER BY RAND() LIMIT 1",
+    (sub, book, chapter))
+    objects = cur.fetchall()
 
-        return render_template("test.html", objects = objects)
+    return render_template("test.html", objects = objects)
 
 # after answer a question, record corrects or wrongs
 @app.route("/record", methods=["POST"])
@@ -247,7 +239,4 @@ def submit_question():
             flash("Submit failed")
             return redirect("/submit-question")
     else:
-        if not session['user_id']:
-            return redirect(url_for('login'))
-        else:
-            return render_template("submit-question.html")
+        return render_template("submit-question.html")
