@@ -1,15 +1,12 @@
 import os
 import yaml
 
-from flask import Flask, flash, redirect, render_template, request, session, g
+from flask import Flask, flash, redirect, render_template, request, session, g, make_response, url_for
 from flask_mysqldb import MySQL
 from flask_session import Session
 from functools import wraps
-from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions
 from werkzeug.security import check_password_hash, generate_password_hash
-
-from helpers import apology, login_required
 
 app = Flask(__name__)
 
@@ -26,19 +23,11 @@ app.secret_key = os.urandom(24)
 # define the login_required
 def login_required(f):
     @wraps(f)
-    def wrap (*args, **kwargs):
-        if 'user_id' in session:
-            return f(*args, **kwargs)
-        else:
-            return redirect('/login')
-    return wrap
-
-@app.before_request
-def before_request():
-    g.user_id = None
-    if 'user_id' in session:
-        g.user_id = session['user_id']
-
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route("/")
 def welcome():
@@ -68,6 +57,7 @@ def register():
             mysql.connection.commit()
             # close the cursor
             cur.close()
+            flash("register success")
             return redirect('/login')
         except:
             flash("register failed")
@@ -77,14 +67,13 @@ def register():
     else:
         return render_template("register.html")
 
-# let user to login, it also clean the session of 'user_id' 'user_name'
+# let user to login, it also clean the session of 'user_id'
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
 
     # Forget any user_id
     session.pop('user_id', None)
-    session.pop('user_name', None)
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -102,6 +91,7 @@ def login():
         if resultValue == 1:
             userDetail = cur.fetchall()
         else:
+            flash("can't find user")
             return redirect("/login")
 
         # Remember which user has logged in
@@ -112,7 +102,6 @@ def login():
                 return redirect("/login")
             else:
                 session["user_id"] = row[0]
-                session['user_name'] = row[1]
 
         # close the cursor
         cur.close()
@@ -125,7 +114,6 @@ def login():
         return render_template("login.html")
 
 # it's the home page, let user to chose the subject
-# it pop the session '_sub'
 @app.route("/home")
 @login_required
 def home():
@@ -148,8 +136,6 @@ def books():
 
         # get the form data
         sub = request.form.get("subject")
-        # store the subject into a session
-        session["_sub"] = sub
 
         # creat a cursor
         cur = mysql.connection.cursor()
@@ -157,7 +143,11 @@ def books():
         cur.execute("SELECT * from books WHERE subID = %s ORDER BY book", [sub])
         objects = cur.fetchall()
 
-        return render_template("home2.html", objects = objects)
+        # store the subject into a cookie
+        resp = make_response(render_template("home2.html", objects = objects))
+        resp.set_cookie('sub', sub)
+
+        return resp
 
 # chose the chapter
 @app.route("/chapters", methods=['GET', 'POST'])
@@ -165,9 +155,10 @@ def books():
 def chapters():
     if request.method == 'POST':
 
-        # get the session data
-        sub = session["_sub"]
+        # get the cookie data
+        sub = request.cookies.get('sub')
         book = request.form.get('book')
+
 
         # creat a cursor
         cur = mysql.connection.cursor()
@@ -176,27 +167,31 @@ def chapters():
         (sub, book))
         objects = cur.fetchall()
 
-        # store the subject into a session
-        session["_book"] = book
+        resp = make_response(render_template("home3.html", objects = objects))
+        resp.set_cookie('book', book)
 
-        return render_template("home3.html", objects = objects)
+        return resp
 
 # after chose the subject,book,chapter then store it all in session
 @app.route("/setsession", methods=['GET', 'POST'])
 @login_required
 def setsession():
     if request.method == "POST":
-        session["_chapter"] = request.form.get("chapter")
-        return redirect("/test")
+        chapter = request.form.get("chapter")
+
+        resp = make_response(redirect("/test"))
+        resp.set_cookie('chapter', chapter)
+
+        return resp
 
 # get the question from database randomly
 @app.route("/test", methods=['GET', 'POST'])
 @login_required
 def text():
     # get the session data
-    sub = session["_sub"]
-    book = session["_book"]
-    chapter = session["_chapter"]
+    sub = request.cookies.get('sub')
+    book = request.cookies.get('book')
+    chapter = request.cookies.get('chapter')
 
     # creat a cursor
     cur = mysql.connection.cursor()
