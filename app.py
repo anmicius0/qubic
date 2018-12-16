@@ -10,6 +10,7 @@ from werkzeug.exceptions import default_exceptions
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 # Configure db
 db = yaml.load(open('db.yaml'))
@@ -19,21 +20,6 @@ app.config['MYSQL_PASSWORD'] = db['mysql_password']
 app.config['MYSQL_DB'] = db['mysql_db']
 mysql = MySQL(app)
 
-
-# Configure session to use filesystem (instead of signed cookies)
-app.config["SESSION_FILE_DIR"] = mkdtemp()
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
-
-# define the login_required
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("user_id") is None:
-            return redirect("/login")
-        return f(*args, **kwargs)
-    return decorated_function
 
 @app.route("/")
 def welcome():
@@ -120,23 +106,24 @@ def login():
         return render_template("login.html")
 
 # it's the home page, let user to chose the subject
+# login_required
 @app.route("/home")
-@login_required
 def home():
+    if not session['user_id']:
+        return redirect(url_for('login'))
+    else:
+        # creat a cursor for mysql
+        cur = mysql.connection.cursor()
+        # Query database for subjects
+        cur.execute("SELECT * FROM subjects ORDER BY subject")
+        objects = cur.fetchall()
+        # close the cursor
+        cur.close()
 
-    # creat a cursor for mysql
-    cur = mysql.connection.cursor()
-    # Query database for subjects
-    cur.execute("SELECT * FROM subjects ORDER BY subject")
-    objects = cur.fetchall()
-    # close the cursor
-    cur.close()
-
-    return render_template("home.html", objects = objects)
+        return render_template("home.html", objects = objects)
 
 # chose the book
-@app.route("/books", methods=['GET', 'POST'])
-@login_required
+@app.route("/books", methods=['POST'])
 def books():
     if request.method == "POST":
 
@@ -156,61 +143,59 @@ def books():
         return resp
 
 # chose the chapter
-@app.route("/chapters", methods=['GET', 'POST'])
-@login_required
+@app.route("/chapters", methods=['POST'])
 def chapters():
-    if request.method == 'POST':
 
-        # get the cookie data
-        sub = request.cookies.get('sub')
-        book = request.form.get('book')
-
-
-        # creat a cursor
-        cur = mysql.connection.cursor()
-        # query the db
-        cur.execute("SELECT * from chapters WHERE subID = %s AND book = %s ORDER BY chapter",
-        (sub, book))
-        objects = cur.fetchall()
-
-        resp = make_response(render_template("home3.html", objects = objects))
-        resp.set_cookie('book', book)
-
-        return resp
-
-# after chose the subject,book,chapter then store it all in session
-@app.route("/setsession", methods=['GET', 'POST'])
-@login_required
-def setsession():
-    if request.method == "POST":
-        chapter = request.form.get("chapter")
-
-        resp = make_response(redirect("/test"))
-        resp.set_cookie('chapter', chapter)
-
-        return resp
-
-# get the question from database randomly
-@app.route("/test", methods=['GET', 'POST'])
-@login_required
-def text():
-    # get the session data
+    # get the cookie data
     sub = request.cookies.get('sub')
-    book = request.cookies.get('book')
-    chapter = request.cookies.get('chapter')
+    book = request.form.get('book')
+
 
     # creat a cursor
     cur = mysql.connection.cursor()
     # query the db
-    cur.execute("SELECT * from questions WHERE subID = %s AND book = %s AND chapter = %s ORDER BY RAND() LIMIT 1",
-    (sub, book, chapter))
+    cur.execute("SELECT * from chapters WHERE subID = %s AND book = %s ORDER BY chapter",
+    (sub, book))
     objects = cur.fetchall()
 
-    return render_template("test.html", objects = objects)
+    resp = make_response(render_template("home3.html", objects = objects))
+    resp.set_cookie('book', book)
+
+    return resp
+
+# after chose the subject,book,chapter then store it all in session
+@app.route("/setsession", methods=['POST'])
+def setsession():
+    chapter = request.form.get("chapter")
+
+    resp = make_response(redirect("/test"))
+    resp.set_cookie('chapter', chapter)
+
+    return resp
+
+# get the question from database randomly
+# login_required
+@app.route("/test", methods=['GET','POST'])
+def text():
+    if not session['user_id']:
+        return redirect(url_for('login'))
+    else:
+        # get the session data
+        sub = request.cookies.get('sub')
+        book = request.cookies.get('book')
+        chapter = request.cookies.get('chapter')
+
+        # creat a cursor
+        cur = mysql.connection.cursor()
+        # query the db
+        cur.execute("SELECT * from questions WHERE subID = %s AND book = %s AND chapter = %s ORDER BY RAND() LIMIT 1",
+        (sub, book, chapter))
+        objects = cur.fetchall()
+
+        return render_template("test.html", objects = objects)
 
 # after answer a question, record corrects or wrongs
-@app.route("/record", methods=["GET", "POST"])
-@login_required
+@app.route("/record", methods=["POST"])
 def record():
     # get the result for the question
     result = request.form.get("result")
@@ -233,8 +218,9 @@ def record():
 
     return redirect("/test")
 
+# for user to submit a new question
+# login_required
 @app.route("/submit-question", methods=["GET", "POST"])
-@login_required
 def submit_question():
     if request.method == "POST":
         subID = request.form.get('subID')
@@ -261,4 +247,7 @@ def submit_question():
             flash("Submit failed")
             return redirect("/submit-question")
     else:
-        return render_template("submit-question.html")
+        if not session['user_id']:
+            return redirect(url_for('login'))
+        else:
+            return render_template("submit-question.html")
